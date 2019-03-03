@@ -16,6 +16,35 @@ export const Repository = styled.div`
   display: flex;
   flex-direction: column;
 
+  div.actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-end;
+      width: 35px;
+      height: 35px;
+      border: none;
+      background: #63f5b8;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 3px;
+      margin-left: 3px;
+
+      i {
+        font-size: 26px;
+      }
+
+      &:hover {
+        background: #52d89f;
+      }
+    }
+  }
+
   header {
     padding: 30px;
     display: flex;
