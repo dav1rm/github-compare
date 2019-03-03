@@ -16,22 +16,20 @@ export default class Main extends Component {
     repositories: [],
   };
 
-  componentWillMount() {
-    const repositories = localStorage.getItem('repositories');
+  async componentWillMount() {
+    const repositories = (await localStorage.getItem('repositories')) || [];
 
-    if (repositories) {
-      this.setState({ repositories: JSON.parse(repositories) });
-    }
+    this.setState({ repositories: JSON.parse(repositories) });
   }
 
-  removeRepository = (repo) => {
+  removeRepository = async (repo) => {
     const { repositories } = this.state;
     // Removendo o repositorio do array
     const newRepositories = repositories.filter(repository => repository !== repo);
     // atualizando o array no state
     this.setState({ repositories: newRepositories });
     // atualizando o array no storage
-    localStorage.setItem('repositories', JSON.stringify(newRepositories));
+    await localStorage.setItem('repositories', JSON.stringify(newRepositories));
   };
 
   updateRepository = async (repo) => {
@@ -45,19 +43,14 @@ export default class Main extends Component {
       repository.lastCommit = moment(repository.pushed_at).fromNow();
 
       // Percorrendo os repositorios e atualizando o repositorio solicitado
-      const newRepositories = repositories.map((repoItem) => {
-        if (repoItem === repo) {
-          return repository;
-        }
-        return repoItem;
-      });
+      const newRepositories = repositories.map(item => (item === repo ? repository : item));
 
       this.setState({
         repositories: newRepositories,
         repositoryError: false,
       });
 
-      localStorage.setItem('repositories', JSON.stringify(newRepositories));
+      await localStorage.setItem('repositories', JSON.stringify(newRepositories));
     } catch (err) {
       this.setState({ repositoryError: true });
     } finally {
@@ -81,7 +74,7 @@ export default class Main extends Component {
         repositoryError: false,
       });
 
-      localStorage.setItem('repositories', JSON.stringify(this.state.repositories));
+      await localStorage.setItem('repositories', JSON.stringify(this.state.repositories));
     } catch (err) {
       this.setState({ repositoryError: true });
     } finally {
